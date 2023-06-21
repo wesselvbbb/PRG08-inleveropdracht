@@ -17,25 +17,40 @@
     <script defer src="./src/knear.js"></script>
     <script defer src="./src/index.js"></script>
 </head>
-
 <body>
-<body>
-<h1>Divers Signals</h1>
-<p>Learn some signals divers use</p>
-<div id="container">
-    <canvas id="output" ></canvas>
-    <video id="video" playsinline ></video>
-</div>
 
-<img src="img/signals%20divers.png" style="width:600px">
-<p id="result">The signal is:</p>
-<h2>Train signal</h2>
-<div id="buttons">
-    <button>Okay</button>
-    <button>Stay there</button>
-    <button>Going down</button>
-    <button>Low on Air</button>
-</div>
-<a href="game.html"><button id="playGame">Play Game</button></a>
+    <h1>Divers Signals</h1>
+    <p>Learn some of the signals divers use</p>
+    <h1 id="gameScore"></h1>
+    <div class="parent"></div>
+    <div id="container">
+        <canvas id="output" ></canvas>
+        <video id="video" playsinline ></video>
+    </div>
+
+    <div id="signals">
+    <img src="img/signals%20divers.png" style="width:500px">
+    </div>
+    <div id="training">
+    <p id="result">The signal is:</p>
+    <h2>Train signal</h2>
+    <div id="trainButtons">
+        <a><button>Okay</button></a>
+        <button>Stay there</button>
+        <button>Going down</button>
+        <button>Low on Air</button>
+    </div>
+    </div>
+
+    <div id="gameScreen" style="display: none;">
+        <div id="gameContainer">
+            <video id="gameVideo"></video>
+            <canvas id="gameCanvas"></canvas>
+        </div>
+        <p id="gameResult"></p>
+
+    </div>
+
+    <button id="playGameButton">Play Game</button>
 
 </body>

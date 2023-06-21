@@ -4,16 +4,18 @@ let videoWidth, videoHeight
 let ctx, canvas
 let handPosition = [];
 const log = document.querySelector("#array")
-const buttons = document.querySelector("#buttons")
+const trainButtons = document.querySelector("#trainButtons")
 const resultPrediction = document.querySelector("#result")
-const VIDEO_WIDTH = 720
-const VIDEO_HEIGHT = 405
+const VIDEO_WIDTH = 620
+const VIDEO_HEIGHT = 305
+let score = 0;
 
 
 const k = 6
 const knn = new kNear(k)
 
-buttons.addEventListener('click', trainingHandler)
+trainButtons.addEventListener('click', trainingHandler)
+
 
 
 async function main() {
@@ -77,35 +79,25 @@ async function startLandmarkDetection(video) {
 // predict de locatie van de vingers met het model
 //
 async function predictLandmarks() {
-    ctx.drawImage(video, 0, 0, videoWidth, videoHeight, 0, 0, canvas.width, canvas.height)
-    const predictions = await model.estimateHands(video)
+    ctx.drawImage(video, 0, 0, videoWidth, videoHeight, 0, 0, canvas.width, canvas.height);
+    const predictions = await model.estimateHands(video);
     if (predictions.length > 0) {
-        drawHand(ctx, predictions[0].landmarks, predictions[0].annotations)
+        drawHand(ctx, predictions[0].landmarks, predictions[0].annotations);
 
-        handPosition = normalizeLandmark(predictions)
-        let prediction = knn.classify(handPosition)
-        console.log(`Signal: ${prediction}`)
-        resultPrediction.innerHTML = `You're doing the '${prediction}' signal.`
+        handPosition = normalizeLandmark(predictions);
+        let prediction = knn.classify(handPosition);
+        console.log(`Signal: ${prediction}`);
+        resultPrediction.innerHTML = `You're doing the '${prediction}' signal.`;
 
-        switch (prediction) {
-            case "Okay":
-                document.body.style.backgroundColor = "cyan";
-                break;
-            case "Stay there":
-                document.body.style.backgroundColor = "lightblue";
-                break;
-            case "Going down":
-                document.body.style.backgroundColor = "blue";
-                break;
-            case "Low on air":
-                document.body.style.backgroundColor = "purple";
-                break;
+        if (gameInProgress) {
+            if (prediction === currentGameSignal) {
+                // Correct hand signal
+                updateGameScore(1); // Increment the score by 1
+                displayRandomSignal();
+            }
         }
-
-
-
     }
-    requestAnimationFrame(predictLandmarks)
+    requestAnimationFrame(predictLandmarks);
 }
 
 
@@ -191,6 +183,55 @@ function trainingHandler(event) {
     }
 }
 
-function saveModel(){
+const playGameButton = document.getElementById("playGameButton");
+playGameButton.addEventListener("click", startGame);
 
+function startGame() {
+    score = 0;
+    // Hide the training section
+    const trainingSection = document.getElementById("training");
+    const signals = document.getElementById("signals");
+    trainingSection.style.display = "none";
+    signals.style.display = "none";
+
+    // Show the game screen
+    const gameScreen = document.getElementById("gameScreen");
+    gameScreen.style.display = "block";
+
+    // Start displaying random hand signals
+    displayRandomSignal();
 }
+
+function displayRandomSignal() {
+    // Get a random hand signal
+    const handSignals = ["Okay", "Stay there", "Going down", "Low on air"];
+    const randomSignal = handSignals[Math.floor(Math.random() * handSignals.length)];
+
+    // Display the random signal text
+    const gameResult = document.getElementById("gameResult");
+    gameResult.innerHTML = `Perform the '${randomSignal}' hand signal.`;
+
+    // Clear the canvas
+    const gameCanvas = document.getElementById("gameCanvas");
+    const gameCtx = gameCanvas.getContext("2d");
+    gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+    // Start the prediction for the game
+    predictGameSignal(randomSignal);
+}
+
+let gameInProgress = false;
+let currentGameSignal = "";
+
+function predictGameSignal(signal) {
+    gameInProgress = true;
+    currentGameSignal = signal;
+}
+
+function updateGameScore(increment) {
+    score += increment; // Increment the score
+    const gameScore = document.getElementById("gameScore");
+    gameScore.innerHTML = `Score: ${score}`;
+}
+
+
