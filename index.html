@@ -19,38 +19,51 @@
 </head>
 <body>
 
-    <h1>Divers Signals</h1>
-    <p>Learn some of the signals divers use</p>
-    <h1 id="gameScore"></h1>
-    <div class="parent"></div>
-    <div id="container">
-        <canvas id="output" ></canvas>
-        <video id="video" playsinline ></video>
-    </div>
 
-    <div id="signals">
-    <img src="img/signals%20divers.png" style="width:500px">
-    </div>
-    <div id="training">
-    <p id="result">The signal is:</p>
-    <h2>Train signal</h2>
-    <div id="trainButtons">
-        <a><button>Okay</button></a>
-        <button>Stay there</button>
-        <button>Going down</button>
-        <button>Low on Air</button>
-    </div>
-    </div>
+<h1>Divers Signals</h1>
+<div id="intro">
+<p>Learn some of the signals divers use. Before playing the game, please train first. Do the signal as shown on the
+    example, click the correseponding button to train! After you've done some training and when you're ready to play the
+    game, click the Play Game button.</p>
+</div>
+<h1 id="gameScore"></h1>
 
-    <div id="gameScreen" style="display: none;">
-        <div id="gameContainer">
-            <video id="gameVideo"></video>
-            <canvas id="gameCanvas"></canvas>
+
+<div class="container">
+    <div class="left-div">
+        <div id="container">
+            <canvas id="output"></canvas>
+            <video id="video" playsinline></video>
         </div>
-        <p id="gameResult"></p>
-
     </div>
+    <div class="right-div">
+        <div id="signals">
+            <img src="img/signals%20divers.png" style="width:550px">
+        </div>
+        <div id="training">
+            <p id="result">The signal is:</p>
+            <h2>Train signal</h2>
+            <div id="trainButtons">
+                <a>
+                    <button>Okay</button>
+                </a>
+                <button>Stay there</button>
+                <button>Going down</button>
+                <button>Low on Air</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <button id="playGameButton">Play Game</button>
+<div id="gameScreen" style="display: none;">
+    <div id="gameContainer">
+        <video id="gameVideo"></video>
+        <canvas id="gameCanvas"></canvas>
+    </div>
+    <p id="gameResult"></p>
+
+</div>
+
+<button id="playGameButton">Play Game</button>
 
 </body>

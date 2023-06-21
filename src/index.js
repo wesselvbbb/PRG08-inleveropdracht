@@ -6,8 +6,8 @@ let handPosition = [];
 const log = document.querySelector("#array")
 const trainButtons = document.querySelector("#trainButtons")
 const resultPrediction = document.querySelector("#result")
-const VIDEO_WIDTH = 620
-const VIDEO_HEIGHT = 305
+const VIDEO_WIDTH = 560
+const VIDEO_HEIGHT = 405
 let score = 0;
 
 
@@ -188,11 +188,13 @@ playGameButton.addEventListener("click", startGame);
 
 function startGame() {
     score = 0;
-    // Hide the training section
+    // delete unnecessary elements
     const trainingSection = document.getElementById("training");
     const signals = document.getElementById("signals");
+    const playGame = document.getElementById("playGameButton");
     trainingSection.style.display = "none";
     signals.style.display = "none";
+    playGame.style.display = "none";
 
     // Show the game screen
     const gameScreen = document.getElementById("gameScreen");

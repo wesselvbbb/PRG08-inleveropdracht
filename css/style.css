@@ -12,13 +12,20 @@ body {
     justify-content: flex-start;
 }
 
-#array {
-    background-color: rgb(36, 32, 65);
-    color: white;
-    font-family: monospace;
-    min-height: 20px;
-    width: 720px;
-    word-wrap: break-word;
+.container {
+    display: flex;
+}
+
+.left-div, .right-div {
+    flex: 1;
+}
+
+.left-div {
+    background-color: #f0f0f0;
+}
+
+.right-div {
+    background-color: #e0e0e0;
 }
 
 video {
@@ -42,13 +49,20 @@ button {
     transition: 0.5s;
     background-size: 200% auto;
     color: white;
+    font-weight: bold;
     box-shadow: 0 0 1px #eee;
     border-radius: 10px;
     background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);
+    border: none;
 }
 
 button:hover {
     background-position: right center;
+}
+
+#intro{
+    width: 60vw;
+    text-align: center;
 }
 
 
