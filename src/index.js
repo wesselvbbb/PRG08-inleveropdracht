@@ -3,20 +3,22 @@ let model
 let videoWidth, videoHeight
 let ctx, canvas
 let handPosition = [];
-const log = document.querySelector("#array")
 const trainButtons = document.querySelector("#trainButtons")
 const resultPrediction = document.querySelector("#result")
 const VIDEO_WIDTH = 560
 const VIDEO_HEIGHT = 405
 let score = 0;
 
+window.addEventListener('beforeunload', saveTraining);
 
-const k = 6
-const knn = new kNear(k)
+const k = 10
+
+const data = fetch("src/data.json").then(res => res.json())
+const knn = new kNear(k, data)
+knn.load();
+
 
 trainButtons.addEventListener('click', trainingHandler)
-
-
 
 async function main() {
     model = await handpose.load()
@@ -47,6 +49,11 @@ async function setupCamera() {
             resolve(video)
         }
     })
+}
+
+function saveTraining () {
+    knn.save()
+    console.log("training saved")
 }
 
 async function startLandmarkDetection(video) {
@@ -185,10 +192,10 @@ function trainingHandler(event) {
 
 const playGameButton = document.getElementById("playGameButton");
 playGameButton.addEventListener("click", startGame);
+let randomSignal = "";
 
 function startGame() {
     score = 0;
-    // delete unnecessary elements
     const trainingSection = document.getElementById("training");
     const signals = document.getElementById("signals");
     const playGame = document.getElementById("playGameButton");
@@ -196,30 +203,25 @@ function startGame() {
     signals.style.display = "none";
     playGame.style.display = "none";
 
-    // Show the game screen
     const gameScreen = document.getElementById("gameScreen");
     gameScreen.style.display = "block";
 
-    // Start displaying random hand signals
     displayRandomSignal();
 }
 
 function displayRandomSignal() {
-    // Get a random hand signal
     const handSignals = ["Okay", "Stay there", "Going down", "Low on air"];
-    const randomSignal = handSignals[Math.floor(Math.random() * handSignals.length)];
+    randomSignal = handSignals[Math.floor(Math.random() * handSignals.length)];
 
-    // Display the random signal text
     const gameResult = document.getElementById("gameResult");
     gameResult.innerHTML = `Perform the '${randomSignal}' hand signal.`;
 
-    // Clear the canvas
     const gameCanvas = document.getElementById("gameCanvas");
     const gameCtx = gameCanvas.getContext("2d");
     gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-    // Start the prediction for the game
-    predictGameSignal(randomSignal);
+    setTimeout(predictGameSignal, 5000, randomSignal);
+    predictGameSignal(randomSignal)
 }
 
 let gameInProgress = false;
@@ -228,12 +230,19 @@ let currentGameSignal = "";
 function predictGameSignal(signal) {
     gameInProgress = true;
     currentGameSignal = signal;
+
+    if (currentGameSignal === randomSignal) {
+        updateGameScore(1);
+    }
 }
 
 function updateGameScore(increment) {
-    score += increment; // Increment the score
-    const gameScore = document.getElementById("gameScore");
-    gameScore.innerHTML = `Score: ${score}`;
+    if (currentGameSignal === randomSignal) {
+        score += increment;
+        const gameScore = document.getElementById("gameScore");
+        gameScore.innerHTML = `Score: ${score}`;
+    }
 }
+
 
 

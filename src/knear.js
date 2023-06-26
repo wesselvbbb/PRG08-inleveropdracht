@@ -1,8 +1,15 @@
 class kNear {
-    constructor(k) {
-        this.k = k
-        this.training = []
-        this.array_size = -1
+    constructor(k, data) {
+        this.k = k;
+        this.training = Array.isArray(data) ? data : [];
+        this.array_size = -1;
+    }
+
+    load() {
+        const trainingData = localStorage.getItem('training');
+        if (trainingData) {
+            this.training = JSON.parse(trainingData);
+        }
     }
 
     //compute the euclidean distance between two vectors
@@ -118,5 +125,9 @@ class kNear {
             votes.push(el.vote)
         }
         return this.mode(votes)
+    }
+
+    save() {
+        localStorage.setItem('training', JSON.stringify(this.training))
     }
 }
