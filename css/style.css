@@ -61,8 +61,10 @@ button:hover {
 }
 
 #intro{
-    width: 60vw;
+    width: 58vw;
     text-align: center;
+    background-color: #e0e0e0;
+    padding: 6px;
 }
 
 

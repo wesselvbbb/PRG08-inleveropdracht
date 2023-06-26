@@ -9,11 +9,12 @@ const VIDEO_WIDTH = 560
 const VIDEO_HEIGHT = 405
 let score = 0;
 
+
 window.addEventListener('beforeunload', saveTraining);
 
 const k = 10
 
-const data = fetch("src/data.json").then(res => res.json())
+const data = fetch("src/data.json").then(res => res.json());
 const knn = new kNear(k, data)
 knn.load();
 
@@ -24,7 +25,7 @@ async function main() {
     model = await handpose.load()
     const video = await setupCamera()
     video.play()
-    startLandmarkDetection(video)
+    await startLandmarkDetection(video)
 }
 
 
@@ -101,6 +102,8 @@ async function predictLandmarks() {
                 // Correct hand signal
                 updateGameScore(1); // Increment the score by 1
                 displayRandomSignal();
+
+
             }
         }
     }
@@ -220,7 +223,7 @@ function displayRandomSignal() {
     const gameCtx = gameCanvas.getContext("2d");
     gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-    setTimeout(predictGameSignal, 5000, randomSignal);
+    // setTimeout(predictGameSignal, 5000, randomSignal);
     predictGameSignal(randomSignal)
 }
 
