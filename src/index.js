@@ -106,7 +106,6 @@ async function predictLandmarks() {
         if (gameInProgress) {
             if (prediction === currentGameSignal) {
                 // Correct hand signal
-                updateGameScore(1); // Increment the score by 1
                 displayRandomSignal();
             }
         }
@@ -205,9 +204,11 @@ function startGame() {
     const trainingSection = document.getElementById("training");
     const signals = document.getElementById("signals");
     const playGame = document.getElementById("playGameButton");
+    const intro = document.getElementById("intro");
     trainingSection.style.display = "none";
     signals.style.display = "none";
     playGame.style.display = "none";
+    intro.style.display = "none";
 
     const gameScreen = document.getElementById("gameScreen");
     gameScreen.style.display = "block";
@@ -239,6 +240,7 @@ function predictGameSignal(signal) {
 
     if (currentGameSignal === randomSignal) {
         updateGameScore(1);
+
     }
 }
 
@@ -247,6 +249,10 @@ function updateGameScore(increment) {
         score += increment;
         const gameScore = document.getElementById("gameScore");
         gameScore.innerHTML = `Score: ${score}`;
+    }
+    if (score >= 15) {
+        alert("Congratulations! You reached 15 points.");
+        score = 0;
     }
 }
 
