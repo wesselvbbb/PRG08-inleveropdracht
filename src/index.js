@@ -9,15 +9,21 @@ const VIDEO_WIDTH = 560
 const VIDEO_HEIGHT = 405
 let score = 0;
 
-
-window.addEventListener('beforeunload', saveTraining);
+// window.addEventListener('beforeunload', saveTraining);
 
 const k = 10
-
 const data = fetch("src/data.json").then(res => res.json());
+
+data.then(jsonData => {
+    for (const entry of jsonData) {
+        const handPosition = entry.v;
+        const signal = entry.lab;
+        knn.learn(handPosition, signal);
+    }
+});
+
 const knn = new kNear(k, data)
 knn.load();
-
 
 trainButtons.addEventListener('click', trainingHandler)
 
@@ -26,8 +32,8 @@ async function main() {
     const video = await setupCamera()
     video.play()
     await startLandmarkDetection(video)
+    console.log(data);
 }
-
 
 async function setupCamera() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -102,14 +108,11 @@ async function predictLandmarks() {
                 // Correct hand signal
                 updateGameScore(1); // Increment the score by 1
                 displayRandomSignal();
-
-
             }
         }
     }
     requestAnimationFrame(predictLandmarks);
 }
-
 
 //draw hand and fingers with x,y coordinates (ignores z-coordinate)
 function drawHand(ctx, keypoints, annotations) {
@@ -213,7 +216,7 @@ function startGame() {
 }
 
 function displayRandomSignal() {
-    const handSignals = ["Okay", "Stay there", "Going down", "Low on air"];
+    const handSignals = ["Okay", "Stay there", "Going down", "Low on Air"];
     randomSignal = handSignals[Math.floor(Math.random() * handSignals.length)];
 
     const gameResult = document.getElementById("gameResult");
@@ -223,7 +226,7 @@ function displayRandomSignal() {
     const gameCtx = gameCanvas.getContext("2d");
     gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-    // setTimeout(predictGameSignal, 5000, randomSignal);
+    setTimeout(predictGameSignal, 5000, randomSignal);
     predictGameSignal(randomSignal)
 }
 
